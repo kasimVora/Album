@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Our Little Album ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap');
+
+* { box-sizing: border-box; }
+html, body { 
+  margin: 0; 
+  min-height: 100%; 
+  background: #fdfaf4; 
+  color: #3a2e32; 
+  font-family: "Cormorant Garamond", serif; 
+  overflow-x: hidden;
+}
+
+/* Paper background texture */
+.bg { 
+  position: fixed; inset: 0; z-index: -3; 
+  background: linear-gradient(to right, #ece3d3, #fdfaf4 12%, #fdfaf4 88%, #ece3d3); 
+}
+.noise { 
+  position: fixed; inset: 0; pointer-events: none; opacity: 0.35; z-index: 20; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E"); 
+}
+
+.shell { width: min(1200px, 96vw); margin: auto; padding: 20px 0 80px; }
+.top { 
+  display: flex; justify-content: space-between; align-items: center; 
+  margin-bottom: 20px; border-bottom: 1px solid #e0d5c1; padding-bottom: 10px; 
+}
+.brand { font-family: "Great Vibes", cursive; font-size: 28px; color: #7a545c; }
+.status { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #7a545c; }
+
+.intro { text-align: center; max-width: 600px; margin: 0 auto 40px; }
+.intro h2 { font: 45px "Great Vibes", cursive; margin: 0 0 5px; color: #7a545c; }
+.intro p { font-size: 18px; margin: 0; color: #5a4b4b; }
+
+/* Page-Flip Container */
+.book-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px auto;
+  padding: 10px;
+}
+
+/* Individual Pages */
+.page {
+  background-color: #fdfbf7;
+  border: 1px solid #e0d5c1;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page Spines */
+.page.--left {
+  border-right: 0;
+  box-shadow: inset -7px 0 10px -5px rgba(0,0,0,0.1);
+  border-radius: 6px 0 0 6px;
+}
+.page.--right {
+  border-left: 0;
+  box-shadow: inset 7px 0 10px -5px rgba(0,0,0,0.1);
+  border-radius: 0 6px 6px 0;
+}
+
+/* Hardcover Page styling */
+.page.hardcover {
+  background-color: #e6d8c8;
+  border: 2px solid #cfbea8;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
+}
+.page.hardcover.front { border-radius: 3px 12px 12px 3px; }
+.page.hardcover.back { border-radius: 12px 3px 3px 12px; }
+
+/* Content inside pages */
+.page-content {
+  padding: 25px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.memory-wrap {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  border: 1px solid #eae2d6;
+  box-shadow: 2px 4px 15px rgba(0,0,0,0.03);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.memory-wrap:before, .memory-wrap:after { 
+  content: ""; position: absolute; width: 20px; height: 20px; border: 2px solid #d4c5b3; pointer-events: none; z-index: 5; 
+}
+.memory-wrap:before { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.memory-wrap:after { bottom: 40px; right: 8px; border-left: none; border-top: none; }
+
+.memory-wrap img, .memory-wrap video {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  object-fit: cover;
+  filter: sepia(0.08);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.caption {
+  font: 24px "Great Vibes", cursive;
+  color: #5a4b4b;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Cover specific styling */
+.cover-img {
+  width: calc(100% - 40px);
+  height: calc(100% - 150px);
+  margin: 20px auto 0;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+  display: block;
+}
+.cover-copy {
+  text-align: center;
+  padding: 20px;
+}
+.cover-copy h1 { font-family: "Great Vibes", cursive; font-size: 45px; line-height: 1; margin: 0; color: #2d2424; }
+.cover-copy p { font-size: 16px; margin: 5px 0 0; font-style: italic; color: #5a4b4b; }
+
+.swipe-hint { text-align: center; margin-top: 15px; font-style: italic; color: #9c898d; animation: floatX 2s ease-in-out infinite; }
+@keyframes floatX { 0%,100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
+/* Loading UI */
+#loader { background: #fdfaf4; z-index: 50; display: grid; place-items: center; text-align: center; padding: 30px; transition: 0.6s; position: fixed; inset: 0; }
+.loaderTitle { font: 60px "Great Vibes", cursive; color: #7a545c; }
+.bar { width: 220px; height: 2px; background: #e0d5c1; margin: 25px auto; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 40%; background: #7a545c; animation: load 1.2s infinite; }
+
+.end { text-align: center; padding: 60px 20px; }
+.end h2 { font: 60px "Great Vibes", cursive; color: #7a545c; margin: 0 0 10px; }
+.end p { font: 22px "Cormorant Garamond", serif; opacity: 0.9; font-style: italic; }
+.heart { font-size: 30px; color: #7a545c; margin-bottom: 15px; }
+
+@keyframes load { from { transform: translateX(-120%); } to { transform: translateX(320%); } }
+
+@media(max-width: 768px) {
+  .page-content { padding: 12px; }
+  .memory-wrap { padding: 8px; }
+  .memory-wrap:after { bottom: 35px; }
+  .caption { font-size: 20px; margin-top: 8px; }
+  .cover-copy h1 { font-size: 38px; }
+}
+</style>
+<!-- Load the open-source Page-Flip library -->
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+</head>
+<body>
+<div class="bg"></div><div class="noise"></div>
+<div id="loader"><div><div class="loaderTitle">Our Story</div><div id="loadText" style="font-style:italic">Binding the pages…</div><div class="bar"><i></i></div></div></div>
+
+<div class="shell">
+  <div class="top"><div class="brand">Our Album ♡</div><div class="status" id="status"></div></div>
+
+  <section id="memories">
+    <div class="intro"><h2>Turning Pages</h2><p>Swipe or click the corners to turn the pages.</p></div>
+    
+    <div class="book-wrapper">
+      <div id="book">
+        <!-- Pages will be injected here by Javascript -->
+      </div>
+    </div>
+    <p class="swipe-hint">← Swipe to turn →</p>
+  </section>
+
+  <section class="end"><div class="heart">❦</div><h2>Forever & Always</h2><p>Thank you for being my favorite part of every chapter.</p></section>
+</div>
+
+<script>
+const FOLDER_ID="10447It8LcOsgqwFQzW0My-NlbMrY01P2";
+const API_KEY="AIzaSyBrbJ2JnnGV_LZmawvj8-2hJp0iKTsRNVU";
+const IMAGE_TYPES=/^image\//i, VIDEO_TYPES=/^video\//i;
+let files=[];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function apiUrl(token=""){
+  const q=encodeURIComponent(`'${FOLDER_ID}' in parents and trashed = false`);
+  return `https://www.googleapis.com/drive/v3/files?q=${q}&pageSize=1000&orderBy=createdTime&fields=nextPageToken,files(id,name,mimeType,thumbnailLink,webContentLink)&key=${encodeURIComponent(API_KEY)}${token?"&pageToken="+encodeURIComponent(token):""}`;
+}
+
+async function fetchAll(){
+  if(API_KEY.startsWith("PASTE_")) throw new Error("Add your Google Drive API key.");
+  let token="", all=[];
+  do{const r=await fetch(apiUrl(token)); if(!r.ok) throw new Error("API request failed."); const d=await r.json(); all.push(...(d.files||[])); token=d.nextPageToken||"";}while(token);
+  return all.filter(f=>IMAGE_TYPES.test(f.mimeType)||VIDEO_TYPES.test(f.mimeType));
+}
+
+function mediaUrl(f){
+  if(f.thumbnailLink) return f.thumbnailLink.replace(/=s\d+$/, "=s1200");
+  return `https://drive.google.com/uc?export=view&id=${encodeURIComponent(f.id)}`;
+}
+
+function createPageHTML(file, isCover = false) {
+  const name = esc(file.name.replace(/\.[^.]+$/,"").replace(/[_-]+/g," "));
+  let contentHtml = "";
+
+  if (isCover) {
+    contentHtml = `
+      <img class="cover-img" src="${mediaUrl(file)}" alt="Cover">
+      <div class="cover-copy">
+        <h1>Forever Us</h1>
+        <p>A beautiful visual story.</p>
+      </div>`;
+  } else {
+    let mediaHtml = IMAGE_TYPES.test(file.mimeType) 
+      ? `<img loading="lazy" src="${mediaUrl(file)}" alt="${name}">`
+      : `<video src="${file.webContentLink||`https://drive.google.com/uc?export=download&id=${file.id}`}" controls preload="metadata"></video>`;
+      
+    contentHtml = `
+      <div class="memory-wrap">
+        ${mediaHtml}
+        <div class="caption">${name || "A beautiful memory"}</div>
+      </div>`;
+  }
+
+  return `
+    <div class="page ${isCover ? 'hardcover front' : ''}">
+      <div class="page-content">
+        ${contentHtml}
+      </div>
+    </div>`;
+}
+
+async function init(){
+ try{
+   files = await fetchAll();
+   const bookContainer = document.getElementById("book");
+   let htmlString = "";
+
+   if(files.length > 0) {
+     // Create Front Cover
+     htmlString += createPageHTML(files[0], true);
+     
+     // Create inner pages
+     for(let i = 1; i < files.length; i++) {
+       htmlString += createPageHTML(files[i]);
+     }
+
+     // Add back cover
+     htmlString += `
+      <div class="page hardcover back">
+        <div class="page-content" style="text-align:center; opacity:0.5; font-style:italic;">
+          <h2>The End</h2>
+        </div>
+      </div>`;
+   }
+
+   bookContainer.innerHTML = htmlString;
+   document.getElementById("status").textContent = `${files.length} Pages`;
+   
+   // Initialize Page-Flip Library
+   const pageFlip = new St.PageFlip(document.getElementById("book"), {
+      width: 450, // Base page width
+      height: 600, // Base page height
+      size: "stretch",
+      minWidth: 300,
+      maxWidth: 600,
+      minHeight: 400,
+      maxHeight: 800,
+      maxShadowOpacity: 0.2,
+      showCover: true,
+      mobileScrollSupport: false,
+      usePortrait: true // Allows 1-page view on mobile
+   });
+
+   // Load pages into the flipper
+   pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+
+   document.getElementById("loader").style.opacity="0"; 
+   setTimeout(()=>document.getElementById("loader").remove(),650);
+ }catch(err){
+   document.getElementById("loadText").textContent = "Error loading files. Check API key.";
+ }
+}
+init();
+</script>
+</body>
+</html>
