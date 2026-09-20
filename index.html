@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kasim & Suzan ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap');
+
+* { box-sizing: border-box; }
+html, body { 
+  margin: 0; 
+  padding: 0;
+  min-height: 100%; 
+  background: #f4efeb; 
+  color: #3a2e32; 
+  font-family: "Cormorant Garamond", serif; 
+  overflow-x: hidden;
+}
+
+/* Beautiful textured background */
+.bg { 
+  position: fixed; inset: 0; z-index: -3; 
+  background: radial-gradient(circle at center, #fcfbf9 0%, #ede6df 100%); 
+}
+.noise { 
+  position: fixed; inset: 0; pointer-events: none; opacity: 0.4; z-index: 20; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E"); 
+}
+
+.shell { 
+  width: min(1200px, 96vw); 
+  margin: auto; 
+  padding: 20px 0 80px; 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.top { 
+  display: flex; justify-content: space-between; align-items: center; 
+  margin-bottom: 20px; border-bottom: 1px solid rgba(122, 84, 92, 0.2); padding-bottom: 15px; 
+}
+.brand { font-family: "Great Vibes", cursive; font-size: 36px; color: #69434b; text-shadow: 1px 1px 3px rgba(0,0,0,0.05); }
+.status { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #8a6c72; font-weight: 600; }
+
+.intro { text-align: center; max-width: 600px; margin: 0 auto 30px; }
+.intro h2 { font: 50px "Great Vibes", cursive; margin: 0 0 5px; color: #69434b; }
+.intro p { font-size: 19px; margin: 0; color: #6e5c5c; font-style: italic; }
+
+/* Page-Flip Container */
+.book-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto 40px;
+  padding: 20px;
+  perspective: 1500px;
+}
+
+/* Individual Pages */
+.page {
+  background-color: #faf7f2;
+  border: 1px solid #e3dcd1;
+  box-shadow: inset 0 0 30px rgba(184, 169, 154, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Realistic Page Spines and Gradients */
+.page.--left {
+  border-right: 0;
+  background: linear-gradient(to right, #f2efe9 0%, #faf7f2 10%, #faf7f2 95%, #e3dad0 100%);
+  box-shadow: inset -15px 0 20px -10px rgba(0,0,0,0.08);
+  border-radius: 4px 0 0 4px;
+}
+.page.--right {
+  border-left: 0;
+  background: linear-gradient(to left, #f2efe9 0%, #faf7f2 10%, #faf7f2 95%, #e3dad0 100%);
+  box-shadow: inset 15px 0 20px -10px rgba(0,0,0,0.08);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Hardcover Page styling */
+.page.hardcover {
+  background-color: #d1bfae;
+  border: 2px solid #bba691;
+}
+.page.hardcover.front { 
+  border-radius: 4px 14px 14px 4px; 
+  background: linear-gradient(to right, #c2ae9c 0%, #d1bfae 15%, #d1bfae 100%);
+  box-shadow: inset 5px 0 10px rgba(0,0,0,0.1), 8px 10px 25px rgba(0,0,0,0.15);
+}
+.page.hardcover.back { 
+  border-radius: 14px 4px 4px 14px; 
+  background: linear-gradient(to left, #c2ae9c 0%, #d1bfae 15%, #d1bfae 100%);
+  box-shadow: inset -5px 0 10px rgba(0,0,0,0.1), -8px 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Content inside pages */
+.page-content {
+  padding: 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Polaroid-style Memory Wrapper */
+.memory-wrap {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  background: #ffffff;
+  border: 1px solid #e8e2d9;
+  border-radius: 2px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+/* Decorative Vintage Corners */
+.memory-wrap::before, .memory-wrap::after { 
+  content: ""; position: absolute; width: 28px; height: 28px; border: 2px solid #d1bfae; pointer-events: none; z-index: 5; 
+}
+.memory-wrap::before { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+.memory-wrap::after { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+/* Square Internal Images with Designed Border */
+.memory-wrap img, .memory-wrap video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin: auto 0;
+  filter: sepia(0.12) contrast(1.05) brightness(0.98);
+  
+  /* Designed double border */
+  border: 5px solid #fff;
+  outline: 1px solid #d1bfae;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+  border-radius: 2px;
+}
+
+.caption {
+  font: 26px "Great Vibes", cursive;
+  color: #4a3b3b;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.2;
+}
+
+/* Cover specific styling */
+.cover-img {
+  width: calc(100% - 30px);
+  height: calc(100% - 180px);
+  margin: 15px auto 0;
+  object-fit: cover;
+  cursor: pointer;
+  
+  /* Heart shape mask strictly for cover */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  display: block;
+}
+
+.cover-copy {
+  text-align: center;
+  padding: 30px 15px;
+}
+.cover-copy h1 { font-family: "Great Vibes", cursive; font-size: 52px; line-height: 1; margin: 0; color: #2d2424; text-shadow: 1px 1px 2px rgba(255,255,255,0.5); }
+.cover-copy p { font-size: 18px; margin: 10px 0 0; font-style: italic; color: #4a3b3b; }
+
+.swipe-hint { 
+  text-align: center; margin-top: 5px; font-size: 16px; font-style: italic; color: #8a6c72; 
+  animation: floatX 2.5s ease-in-out infinite; 
+}
+@keyframes floatX { 0%,100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+
+/* Loading UI */
+#loader { background: #fdfaf4; z-index: 50; display: grid; place-items: center; text-align: center; padding: 30px; transition: opacity 0.8s ease, visibility 0.8s; position: fixed; inset: 0; }
+.loaderTitle { font: 70px "Great Vibes", cursive; color: #69434b; }
+.bar { width: 240px; height: 2px; background: #e0d5c1; margin: 30px auto; overflow: hidden; border-radius: 2px;}
+.bar i { display: block; height: 100%; width: 40%; background: #69434b; animation: load 1.2s infinite ease-in-out; border-radius: 2px;}
+
+.end { text-align: center; padding: 80px 20px 40px; margin-top: auto; }
+.end h2 { font: 65px "Great Vibes", cursive; color: #69434b; margin: 0 0 10px; }
+.end p { font: 24px "Cormorant Garamond", serif; opacity: 0.9; font-style: italic; color: #5a4b4b;}
+.heart { font-size: 35px; color: #8a6c72; margin-bottom: 15px; animation: pulse 2s infinite; }
+
+@keyframes load { from { transform: translateX(-120%); } to { transform: translateX(320%); } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+/* Responsive adjustments */
+@media(max-width: 768px) {
+  .page-content { padding: 15px; }
+  .memory-wrap { padding: 15px 15px 20px; }
+  .caption { font-size: 22px; margin-top: 15px; }
+  .cover-copy h1 { font-size: 42px; }
+  .intro h2 { font-size: 40px; }
+  .book-wrapper { padding: 5px; margin: 20px auto; }
+}
+</style>
+<!-- Load the open-source Page-Flip library -->
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+</head>
+<body>
+
+<!-- Hidden File Picker for Triple Tap Cover Feature -->
+<input type="file" id="coverPicker" accept="image/*" style="display: none;">
+
+<!-- Page Flip Audio Element -->
+<audio id="flipSound" src="https://upload.wikimedia.org/wikipedia/commons/1/14/Page_turn.ogg" preload="auto"></audio>
+
+<div class="bg"></div><div class="noise"></div>
+<div id="loader"><div><div class="loaderTitle">Kasim & Suzan</div><div id="loadText" style="font-style:italic; font-size: 20px;">Binding the pages…</div><div class="bar"><i></i></div></div></div>
+
+<div class="shell">
+  <div class="top"><div class="brand">Kasim & Suzan ♡</div><div class="status" id="status">Gathering memories...</div></div>
+
+  <section id="memories">
+    <div class="intro">
+      <h2>Turning Pages</h2>
+      <p>Swipe, drag, or tap the corners to turn the pages.</p>
+    </div>
+    
+    <div class="book-wrapper">
+      <div id="book">
+        <!-- Pages will be injected here by Javascript -->
+      </div>
+    </div>
+    <p class="swipe-hint">← Swipe or drag to turn →</p>
+  </section>
+
+  <section class="end">
+    <div class="heart">❦</div>
+    <h2>Forever & Always</h2>
+    <p>Thank you for being my favorite part of every chapter.</p>
+  </section>
+</div>
+
+<script>
+const FOLDER_ID="10447It8LcOsgqwFQzW0My-NlbMrY01P2";
+const API_KEY="AIzaSyBrbJ2JnnGV_LZmawvj8-2hJp0iKTsRNVU";
+const IMAGE_TYPES=/^image\//i, VIDEO_TYPES=/^video\//i;
+let files=[];
+
+// --- Audio & Global Interaction Setup ---
+const flipSound = document.getElementById("flipSound");
+flipSound.volume = 0.6; 
+
+// Modern browsers block audio until user interaction. We unlock it on the first touch/click.
+let audioUnlocked = false;
+function unlockAudio() {
+    if (!audioUnlocked) {
+        flipSound.play().then(() => {
+            flipSound.pause();
+            flipSound.currentTime = 0;
+            audioUnlocked = true;
+        }).catch(() => {});
+    }
+}
+document.addEventListener('click', unlockAudio, { once: true });
+document.addEventListener('touchstart', unlockAudio, { once: true });
+
+// --- Triple Tap Cover Image Changer ---
+let tapCount = 0;
+let tapTimer;
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cover-img')) {
+        tapCount++;
+        if (tapCount === 1) {
+            tapTimer = setTimeout(() => {
+                tapCount = 0; // Reset if not tapped 3 times quickly
+            }, 800); // 800ms window for triple tap
+        } else if (tapCount === 3) {
+            clearTimeout(tapTimer);
+            tapCount = 0;
+            document.getElementById('coverPicker').click();
+        }
+    }
+});
+
+document.getElementById('coverPicker').addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const fileURL = URL.createObjectURL(this.files[0]);
+        // Update all elements with cover-img (page-flip might render clones for smooth transitions)
+        document.querySelectorAll('.cover-img').forEach(img => {
+            img.src = fileURL;
+        });
+    }
+});
+// ----------------------------------------
+
+function apiUrl(token=""){
+  const q=encodeURIComponent(`'${FOLDER_ID}' in parents and trashed = false`);
+  // Includes "createdTime" to the fields parameter to fetch the file date
+  return `https://www.googleapis.com/drive/v3/files?q=${q}&pageSize=1000&orderBy=createdTime&fields=nextPageToken,files(id,name,mimeType,thumbnailLink,webContentLink,createdTime)&key=${encodeURIComponent(API_KEY)}${token?"&pageToken="+encodeURIComponent(token):""}`;
+}
+
+async function fetchAll(){
+  if(API_KEY.startsWith("PASTE_")) throw new Error("Add your Google Drive API key.");
+  let token="", all=[];
+  do{const r=await fetch(apiUrl(token)); if(!r.ok) throw new Error("API request failed."); const d=await r.json(); all.push(...(d.files||[])); token=d.nextPageToken||"";}while(token);
+  return all.filter(f=>IMAGE_TYPES.test(f.mimeType)||VIDEO_TYPES.test(f.mimeType));
+}
+
+function mediaUrl(f){
+  if(f.thumbnailLink) return f.thumbnailLink.replace(/=s\d+$/, "=s1200");
+  return `https://drive.google.com/uc?export=view&id=${encodeURIComponent(f.id)}`;
+}
+
+function createPageHTML(file, isCover = false) {
+  let contentHtml = "";
+
+  // Convert the Google Drive file creation date into a readable string
+  let dateString = "A beautiful memory";
+  if (file.createdTime) {
+      const dateObj = new Date(file.createdTime);
+      if (!isNaN(dateObj)) {
+          // Formats the date to look like "September 20, 2026"
+          dateString = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+  }
+
+  if (isCover) {
+    contentHtml = `
+      <img class="cover-img" src="${mediaUrl(file)}" alt="Cover" title="Triple tap to change cover">
+      <div class="cover-copy">
+        <h1>Kasim & Suzan</h1>
+        <p>A beautiful visual story.</p>
+      </div>`;
+  } else {
+    let mediaHtml = IMAGE_TYPES.test(file.mimeType) 
+      ? `<img loading="lazy" src="${mediaUrl(file)}" alt="Memory">`
+      : `<video src="${file.webContentLink||`https://drive.google.com/uc?export=download&id=${file.id}`}" controls preload="metadata"></video>`;
+      
+    contentHtml = `
+      <div class="memory-wrap">
+        ${mediaHtml}
+        <div class="caption">${dateString}</div>
+      </div>`;
+  }
+
+  return `
+    <div class="page ${isCover ? 'hardcover front' : ''}">
+      <div class="page-content">
+        ${contentHtml}
+      </div>
+    </div>`;
+}
+
+async function init(){
+ try{
+   files = await fetchAll();
+   const bookContainer = document.getElementById("book");
+   let htmlString = "";
+
+   if(files.length > 0) {
+     // Create Front Cover
+     htmlString += createPageHTML(files[0], true);
+     
+     // Create inner pages (ensuring even page count looks best in two-page spread)
+     for(let i = 1; i < files.length; i++) {
+       htmlString += createPageHTML(files[i]);
+     }
+
+     // Add blank trailing pages if necessary to keep the back cover on the right side
+     if(files.length % 2 === 0) {
+        htmlString += `
+        <div class="page">
+            <div class="page-content">
+                <div style="text-align:center; opacity:0.3; margin-top:50%;">❦</div>
+            </div>
+        </div>`;
+     }
+
+     // Add back cover
+     htmlString += `
+      <div class="page hardcover back">
+        <div class="page-content" style="text-align:center; opacity:0.6; font-style:italic;">
+          <h2 style="font-family: 'Great Vibes', cursive; font-size: 40px; color: #2d2424;">The End</h2>
+        </div>
+      </div>`;
+   }
+
+   bookContainer.innerHTML = htmlString;
+   document.getElementById("status").textContent = `${files.length} Pages`;
+   
+   // Initialize Page-Flip Library with smoother animations and fully responsive settings
+   const pageFlip = new St.PageFlip(document.getElementById("book"), {
+      width: 480, // Base page width
+      height: 650, // Base page height
+      size: "stretch", // Resizes based on container
+      minWidth: 300,
+      maxWidth: 550,
+      minHeight: 400,
+      maxHeight: 800,
+      maxShadowOpacity: 0.4, // Darker center spine shadow for realism
+      showCover: true,
+      mobileScrollSupport: false,
+      usePortrait: true, // Enables single-page view on mobile
+      flippingTime: 1200 // Slower, smoother page turn
+   });
+
+   // Load pages into the flipper
+   pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+
+   // Play sound on page flip
+   pageFlip.on('flip', (e) => {
+       if (audioUnlocked) {
+           flipSound.currentTime = 0;
+           flipSound.play().catch(err => console.log("Audio play error:", err));
+       }
+   });
+
+   // Smooth Loader fadeout
+   const loader = document.getElementById("loader");
+   loader.style.opacity = "0"; 
+   loader.style.visibility = "hidden";
+   setTimeout(() => loader.remove(), 800);
+
+ } catch(err) {
+   document.getElementById("loadText").textContent = "Error loading files. Check API key.";
+ }
+}
+
+init();
+</script>
+</body>
+</html>
