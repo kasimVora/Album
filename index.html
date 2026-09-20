@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#69434b">
+<meta name="description" content="Kasim & Suzan — a digital memory album">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Kasim & Suzan ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap');
+
+:root{
+  --ink:#3a2e32; --muted:#806c72; --rose:#69434b; --paper:#faf7f2;
+  --paper2:#f2eee8; --line:rgba(122,84,92,.2); --gold:#b99a6a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%;background:#f4efeb;color:var(--ink);
+  font-family:"Cormorant Garamond",serif;overflow-x:hidden}
+body.modal-open{overflow:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+.bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at center,#fcfbf9 0%,#ede6df 100%)}
+.noise{position:fixed;inset:0;pointer-events:none;opacity:.22;z-index:20;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E")}
+.shell{width:min(1250px,96vw);margin:auto;padding:18px 0 70px;min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px;border-bottom:1px solid var(--line);padding:0 4px 13px}
+.brand{font:36px "Great Vibes",cursive;color:var(--rose)}
+.status{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#8a6c72;font-weight:600;text-align:right}
+.intro{text-align:center;max-width:680px;margin:0 auto 18px}
+.intro h2{font:50px "Great Vibes",cursive;margin:0 0 3px;color:var(--rose)}
+.intro p{font-size:18px;margin:0;color:#6e5c5c;font-style:italic}
+.book-wrapper{display:flex;justify-content:center;align-items:center;margin:8px auto 14px;padding:10px;perspective:1500px}
+#book{width:min(1100px,94vw);min-height:400px}
+.page{background:var(--paper);border:1px solid #e3dcd1;box-shadow:inset 0 0 30px rgba(184,169,154,.15);overflow:hidden;display:flex;flex-direction:column}
+.page.--left{border-right:0;background:linear-gradient(to right,#f2efe9 0%,#faf7f2 10%,#faf7f2 95%,#e3dad0 100%);box-shadow:inset -15px 0 20px -10px rgba(0,0,0,.08);border-radius:4px 0 0 4px}
+.page.--right{border-left:0;background:linear-gradient(to left,#f2efe9 0%,#faf7f2 10%,#faf7f2 95%,#e3dad0 100%);box-shadow:inset 15px 0 20px -10px rgba(0,0,0,.08);border-radius:0 4px 4px 0}
+.page.hardcover{background:#d1bfae;border:2px solid #bba691}
+.page.hardcover.front{border-radius:4px 14px 14px 4px;background:linear-gradient(to right,#c2ae9c 0%,#d1bfae 15%,#d1bfae 100%);box-shadow:inset 5px 0 10px rgba(0,0,0,.1),8px 10px 25px rgba(0,0,0,.15)}
+.page.hardcover.back{border-radius:14px 4px 4px 14px;background:linear-gradient(to left,#c2ae9c 0%,#d1bfae 15%,#d1bfae 100%);box-shadow:inset -5px 0 10px rgba(0,0,0,.1),-8px 10px 25px rgba(0,0,0,.15)}
+.page-content{padding:25px;height:100%;display:flex;flex-direction:column;justify-content:center}
+.memory-wrap{width:100%;height:100%;min-height:0;background:#fff;border:1px solid #e8e2d9;border-radius:2px;box-shadow:0 8px 20px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.04);padding:18px 18px 15px;display:flex;flex-direction:column;position:relative}
+.memory-wrap:before,.memory-wrap:after{content:"";position:absolute;width:28px;height:28px;border:2px solid #d1bfae;pointer-events:none;z-index:5}
+.memory-wrap:before{top:10px;left:10px;border-right:none;border-bottom:none}
+.memory-wrap:after{bottom:10px;right:10px;border-left:none;border-top:none}
+.media-box{position:relative;display:flex;align-items:center;justify-content:center;flex:1;min-height:0;overflow:hidden;background:linear-gradient(135deg,#eee8e1,#f8f5f0);border:5px solid #fff;outline:1px solid #d1bfae;box-shadow:0 6px 15px rgba(0,0,0,.06);border-radius:2px}
+.media-box img,.media-box video{width:100%;height:100%;object-fit:contain;display:block;filter:sepia(.08) contrast(1.04) brightness(.99);background:#eee8e1}
+.media-box img{cursor:zoom-in}
+.media-placeholder{width:100%;height:100%;display:grid;place-items:center;color:#9b898d;font-style:italic;min-height:180px}
+.video-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:rgba(40,28,30,.72);color:#fff;font-size:25px;pointer-events:none;box-shadow:0 5px 18px rgba(0,0,0,.2)}
+.media-box video{cursor:pointer}
+.caption{font:25px "Great Vibes",cursive;color:#4a3b3b;text-align:center;margin-top:13px;line-height:1.1;min-height:28px}
+.subcaption{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#927d82;text-align:center;margin-top:3px}
+.favorite-btn{position:absolute;right:12px;top:10px;border:0;background:rgba(255,255,255,.86);width:36px;height:36px;border-radius:50%;font-size:19px;color:#8c6a70;z-index:7;box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.favorite-btn.active{color:#a33b50}
+.cover-img{width:calc(100% - 30px);height:calc(100% - 180px);margin:12px auto 0;object-fit:cover;cursor:pointer;display:block;
+-webkit-mask-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z'/%3E%3C/svg%3E");
+mask-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z'/%3E%3C/svg%3E");
+-webkit-mask-size:contain;mask-size:contain;-webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;filter:sepia(.08) contrast(1.05)}
+.cover-copy{text-align:center;padding:22px 15px}
+.cover-copy h1{font:52px "Great Vibes",cursive;line-height:1;margin:0;color:#2d2424}
+.cover-copy p{font-size:17px;margin:9px 0 0;font-style:italic;color:#4a3b3b}
+.cover-hint{font-size:11px;letter-spacing:1px;text-transform:uppercase;opacity:.6;margin-top:8px}
+.end{text-align:center;padding:65px 20px 35px;margin-top:auto}
+.end h2{font:65px "Great Vibes",cursive;color:var(--rose);margin:0 0 8px}
+.end p{font-size:23px;margin:0;color:#5a4b4b;font-style:italic}
+.heart{font-size:35px;color:#8a6c72;margin-bottom:12px;animation:pulse 2s infinite}
+.swipe-hint{text-align:center;margin:3px 0 12px;font-size:15px;font-style:italic;color:#8a6c72}
+.controls{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:4px auto 12px}
+.ctrl{border:1px solid rgba(105,67,75,.22);background:rgba(255,255,255,.68);color:#684750;border-radius:999px;padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.04);transition:.2s}
+.ctrl:hover{transform:translateY(-1px);background:#fff}
+.page-indicator{font-size:13px;letter-spacing:.8px;color:#755f64;min-width:125px;text-align:center}
+.progress{height:3px;width:min(700px,88vw);margin:0 auto 16px;background:rgba(105,67,75,.12);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:#69434b;transition:width .25s ease}
+.loader{background:#fdfaf4;z-index:50;display:grid;place-items:center;text-align:center;padding:30px;transition:opacity .6s ease,visibility .6s;position:fixed;inset:0}
+.loaderTitle{font:70px "Great Vibes",cursive;color:#69434b}
+.bar{width:270px;height:3px;background:#e0d5c1;margin:25px auto 14px;overflow:hidden;border-radius:2px}
+.bar i{display:block;height:100%;width:40%;background:#69434b;animation:load 1.2s infinite ease-in-out;border-radius:2px}
+.load-meta{font-size:14px;color:#806c72}
+@keyframes load{from{transform:translateX(-120%)}to{transform:translateX(320%)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+/* overlays */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(35,25,28,.56);backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.open{display:flex}
+.panel{width:min(1050px,96vw);max-height:90vh;overflow:auto;background:#fbf8f3;border:1px solid #e0d6cc;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.25);padding:22px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
+.panel-head h3{font:36px "Great Vibes",cursive;color:var(--rose);margin:0}
+.close{border:0;background:#eee7e0;width:38px;height:38px;border-radius:50%;font-size:22px;color:#61464d}
+.searchbar{display:flex;gap:8px;margin-bottom:15px}
+.searchbar input{flex:1;border:1px solid #d9cec4;background:#fff;border-radius:12px;padding:11px 13px;outline:none}
+.searchbar input:focus{border-color:#a88990;box-shadow:0 0 0 3px rgba(105,67,75,.08)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:9px}
+.thumb{border:1px solid #ded3ca;background:#fff;border-radius:9px;padding:4px;position:relative;cursor:pointer;aspect-ratio:1}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block}
+.thumb span{position:absolute;left:5px;bottom:5px;background:rgba(35,25,28,.68);color:#fff;border-radius:5px;padding:2px 5px;font-size:10px}
+.thumb .fav{position:absolute;right:5px;top:5px;background:rgba(255,255,255,.88);border-radius:50%;padding:2px 5px;color:#a33b50}
+.no-results{text-align:center;padding:35px;color:#87757a}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat{background:#fff;border:1px solid #e5dbd1;border-radius:12px;padding:18px;text-align:center}
+.stat strong{display:block;font-size:31px;color:#69434b}
+.stat span{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#806c72}
+.timeline{display:flex;flex-direction:column;gap:12px}
+.year-block{background:#fff;border:1px solid #e5dbd1;border-radius:12px;padding:14px}
+.year-title{font:30px "Great Vibes",cursive;color:#69434b}
+.month-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #e6ddd5;font-size:15px}
+.viewer{background:rgba(12,9,10,.92);z-index:120}
+.viewer-content{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.viewer-media{max-width:94vw;max-height:88vh;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,.4);touch-action:none}
+.viewer-close{position:fixed;top:18px;right:18px;z-index:5;border:0;background:rgba(255,255,255,.13);color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px}
+.viewer-nav{position:fixed;top:50%;transform:translateY(-50%);z-index:5;border:0;background:rgba(255,255,255,.12);color:#fff;width:48px;height:70px;border-radius:12px;font-size:30px}
+.viewer-prev{left:15px}.viewer-next{right:15px}
+.viewer-caption{position:fixed;bottom:16px;left:0;right:0;text-align:center;color:#fff;font-size:16px;text-shadow:0 2px 8px #000}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);z-index:200;background:#34262a;color:#fff;padding:10px 15px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.music-box{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.music-box input{max-width:100%}
+.chapter{background:linear-gradient(135deg,#eee4dc,#fbf7f2);text-align:center}
+.chapter h2{font:55px "Great Vibes",cursive;color:#69434b;margin:0}
+.chapter p{font-style:italic;color:#806c72;font-size:17px}
+.hidden{display:none!important}
+
+@media(max-width:768px){
+  .shell{width:100%;padding:10px 0 45px}
+  .top{padding:0 10px 10px}
+  .brand{font-size:29px}.status{font-size:10px;letter-spacing:1px}
+  .intro h2{font-size:40px}.intro p{font-size:16px;padding:0 12px}
+  .book-wrapper{padding:3px;margin:5px auto 8px}
+  #book{width:96vw}
+  .page-content{padding:12px}
+  .memory-wrap{padding:12px 11px 12px}
+  .caption{font-size:21px;margin-top:10px}.subcaption{font-size:9px}
+  .cover-copy h1{font-size:42px}.cover-copy{padding:18px 10px}
+  .controls{gap:5px}.ctrl{padding:7px 10px;font-size:13px}
+  .page-indicator{order:-1;flex-basis:100%}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}
+  .panel{padding:14px;border-radius:14px}
+  .panel-head h3{font-size:31px}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+</head>
+<body>
+<div class="bg"></div><div class="noise"></div>
+
+<input type="file" id="coverPicker" accept="image/*" hidden>
+<input type="file" id="musicPicker" accept="audio/*" hidden>
+<audio id="flipSound" preload="auto" src="https://upload.wikimedia.org/wikipedia/commons/1/14/Page_turn.ogg"></audio>
+<audio id="bgMusic" loop></audio>
+
+<div id="loader" class="loader">
+  <div>
+    <div class="loaderTitle">Kasim & Suzan</div>
+    <div id="loadText" style="font-style:italic;font-size:20px">Gathering memories…</div>
+    <div class="bar"><i></i></div>
+    <div id="loadMeta" class="load-meta">Preparing your album</div>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="top">
+    <div class="brand">Kasim & Suzan ♡</div>
+    <div class="status" id="status">Preparing…</div>
+  </div>
+
+  <section id="memories">
+    <div class="intro">
+      <h2>Turning Pages</h2>
+      <p>Seven hundred memories can still feel effortless — browse, search, jump, or simply turn the pages.</p>
+    </div>
+
+    <div class="book-wrapper"><div id="book"></div></div>
+
+    <div class="progress"><i id="progressBar"></i></div>
+
+    <div class="controls">
+      <button class="ctrl" id="prevBtn">← Previous</button>
+      <div class="page-indicator" id="pageIndicator">Memory 0 / 0</div>
+      <button class="ctrl" id="nextBtn">Next →</button>
+      <button class="ctrl" id="browseBtn">☷ Browse</button>
+      <button class="ctrl" id="searchBtn">⌕ Search</button>
+      <button class="ctrl" id="jumpBtn"># Jump</button><button class="ctrl" id="randomBtn">✦ Surprise Me</button>
+      <button class="ctrl" id="favBtn">♥ Favorites</button>
+      <button class="ctrl" id="timelineBtn">◷ Timeline</button>
+      <button class="ctrl" id="statsBtn">♡ Stats</button>
+      <button class="ctrl" id="musicBtn">♫ Music</button>
+    </div>
+    <p class="swipe-hint">Swipe, drag, tap a corner, or use the controls to turn the pages.</p>
+  </section>
+
+  <section class="end">
+    <div class="heart">❦</div>
+    <h2>Forever & Always</h2>
+    <p>Thank you for being my favorite part of every chapter.</p>
+  </section>
+</div>
+
+<!-- Browser / search panel -->
+<div class="overlay" id="browserOverlay">
+  <div class="panel">
+    <div class="panel-head"><h3 id="browserTitle">Memories</h3><button class="close" data-close="browserOverlay">×</button></div>
+    <div class="searchbar"><input id="browserSearch" placeholder="Search by filename, date, month or year…"></div>
+    <div id="browserGrid" class="grid"></div>
+  </div>
+</div>
+
+<div class="overlay" id="timelineOverlay">
+  <div class="panel">
+    <div class="panel-head"><h3>Our Timeline</h3><button class="close" data-close="timelineOverlay">×</button></div>
+    <div id="timeline" class="timeline"></div>
+  </div>
+</div>
+
+<div class="overlay" id="statsOverlay">
+  <div class="panel">
+    <div class="panel-head"><h3>Our Memories</h3><button class="close" data-close="statsOverlay">×</button></div>
+    <div id="stats" class="stats"></div>
+    <div style="height:14px"></div>
+    <div style="text-align:center;color:#806c72;font-style:italic">Your favorites and cover choice are stored locally on this device.</div>
+  </div>
+</div>
+
+<div class="overlay" id="musicOverlay">
+  <div class="panel">
+    <div class="panel-head"><h3>Album Music</h3><button class="close" data-close="musicOverlay">×</button></div>
+    <p style="color:#806c72">Choose a local audio file. The browser will only start it after you press Play.</p>
+    <div class="music-box">
+      <button class="ctrl" id="chooseMusic">Choose Music</button>
+      <button class="ctrl" id="playMusic">▶ Play</button>
+      <button class="ctrl" id="pauseMusic">Ⅱ Pause</button>
+      <button class="ctrl" id="shuffleMusic">⤨ Shuffle / Replay</button>
+    </div>
+    <div id="musicName" style="margin-top:15px;font-style:italic;color:#69434b">No music selected</div>
+  </div>
+</div>
+
+<div class="overlay viewer" id="viewerOverlay">
+  <div class="viewer-content">
+    <button class="viewer-close" id="viewerClose">×</button>
+    <button class="viewer-nav viewer-prev" id="viewerPrev">‹</button>
+    <div id="viewerMedia"></div>
+    <button class="viewer-nav viewer-next" id="viewerNext">›</button>
+    <div class="viewer-caption" id="viewerCaption"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* =========================
+   ALBUM CONFIGURATION
+   ========================= */
+const FOLDER_ID = "10447It8LcOsgqwFQzW0My-NlbMrY01P2";
+const API_KEY = "AIzaSyBrbJ2JnnGV_LZmawvj8-2hJp0iKTsRNVU";
+const IMAGE_TYPES = /^image\\//i;
+const VIDEO_TYPES = /^video\\//i;
+const CACHE_KEY = "kasim_suzan_album_cache_v3";
+const FAVORITES_KEY = "kasim_suzan_favorites_v3";
+const COVER_KEY = "kasim_suzan_cover_v3";
+
+let files = [];
+let pageFlip = null;
+let currentPageIndex = 0;
+let audioUnlocked = false;
+let coverObjectUrl = null;
+let musicObjectUrl = null;
+let viewerFileIndex = -1;
+let viewerScale = 1;
+let touchStartX = null;
+
+const $ = id => document.getElementById(id);
+const flipSound = $("flipSound");
+const bgMusic = $("bgMusic");
+flipSound.volume = .55;
+
+/* =========================
+   UTILITIES
+   ========================= */
+function escapeHTML(value=""){
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[c]));
+}
+function toast(message){
+  const el = $("toast"); el.textContent = message; el.classList.add("show");
+  clearTimeout(toast.t); toast.t = setTimeout(()=>el.classList.remove("show"),2200);
+}
+function formatDate(file){
+  const raw = file.captureTime || file.createdTime || file.modifiedTime;
+  if(!raw) return "A beautiful memory";
+  const d = new Date(raw);
+  if(Number.isNaN(d.getTime())) return "A beautiful memory";
+  return d.toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+}
+function dateObject(file){
+  const raw = file.captureTime || file.createdTime || file.modifiedTime;
+  const d = raw ? new Date(raw) : new Date(0);
+  return Number.isNaN(d.getTime()) ? new Date(0) : d;
+}
+function mediaUrl(file,size=1200){
+  if(file.thumbnailLink) return file.thumbnailLink.replace(/=s\\d+$/,`=s${size}`);
+  return `https://drive.google.com/uc?export=view&id=${encodeURIComponent(file.id)}`;
+}
+function videoUrl(file){
+  return file.webContentLink ||
+    `https://drive.google.com/uc?export=download&id=${encodeURIComponent(file.id)}`;
+}
+function isVideo(file){ return VIDEO_TYPES.test(file.mimeType || ""); }
+function isImage(file){ return IMAGE_TYPES.test(file.mimeType || ""); }
+function getFavorites(){
+  try{return new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)||"[]"))}
+  catch{return new Set()}
+}
+function saveFavorites(set){ localStorage.setItem(FAVORITES_KEY,JSON.stringify([...set])); }
+function isFavorite(id){ return getFavorites().has(id); }
+function toggleFavorite(id){
+  const s=getFavorites();
+  s.has(id)?s.delete(id):s.add(id);
+  saveFavorites(s);
+  updateFavoriteButtons();
+  renderStats();
+  return s.has(id);
+}
+function unlockAudio(){
+  if(audioUnlocked) return;
+  flipSound.play().then(()=>{flipSound.pause();flipSound.currentTime=0;audioUnlocked=true}).catch(()=>{});
+}
+document.addEventListener("pointerdown",unlockAudio,{once:true,passive:true});
+
+/* =========================
+   GOOGLE DRIVE
+   ========================= */
+function apiUrl(token=""){
+  const q=encodeURIComponent(`'${FOLDER_ID}' in parents and trashed = false`);
+  const fields="nextPageToken,files(id,name,mimeType,thumbnailLink,webContentLink,createdTime,modifiedTime,imageMediaMetadata(time,location(latitude,longitude)),videoMediaMetadata(creationTime))";
+  return `https://www.googleapis.com/drive/v3/files?q=${q}&pageSize=1000&orderBy=createdTime&fields=${encodeURIComponent(fields)}&key=${encodeURIComponent(API_KEY)}${token?"&pageToken="+encodeURIComponent(token):""}`;
+}
+async function fetchAll(){
+  if(!API_KEY || API_KEY.startsWith("PASTE_")) throw new Error("Google Drive API key is missing.");
+  let token="", all=[];
+  do{
+    const r=await fetch(apiUrl(token));
+    if(!r.ok){
+      let msg="";
+      try{const d=await r.json();msg=d?.error?.message||""}catch{}
+      throw new Error(`${r.status}${msg?": "+msg:""} — Drive API request failed.`);
+    }
+    const d=await r.json();
+    all.push(...(d.files||[]));
+    token=d.nextPageToken||"";
+  }while(token);
+
+  return all.filter(f=>isImage(f)||isVideo(f)).map(f=>{
+    const imageTime=f.imageMediaMetadata?.time;
+    const videoTime=f.videoMediaMetadata?.creationTime;
+    return {
+      ...f,
+      captureTime:imageTime || videoTime || f.createdTime || f.modifiedTime || null
+    };
+  }).sort((a,b)=>dateObject(a)-dateObject(b));
+}
+async function loadAlbum(){
+  $("loadText").textContent="Gathering memories…";
+  $("loadMeta").textContent="Connecting to Google Drive";
+  try{
+    const fresh=await fetchAll();
+    files=fresh;
+    localStorage.setItem(CACHE_KEY,JSON.stringify({savedAt:Date.now(),files}));
+    return;
+  }catch(error){
+    console.warn(error);
+    try{
+      const cached=JSON.parse(localStorage.getItem(CACHE_KEY)||"null");
+      if(cached?.files?.length){
+        files=cached.files;
+        $("loadText").textContent="Opening saved memories…";
+        $("loadMeta").textContent=`Offline cache · ${files.length} memories`;
+        toast("Drive unavailable — opened the latest cached album.");
+        return;
+      }
+    }catch{}
+    throw error;
+  }
+}
+
+/* =========================
+   PAGE HTML
+   ========================= */
+function createCoverHTML(file){
+  return `
+    <div class="page hardcover front">
+      <div class="page-content">
+        <img class="cover-img" src="${escapeHTML(mediaUrl(file,1200))}" alt="Album cover" title="Triple tap to change cover">
+        <div class="cover-copy">
+          <h1>Kasim & Suzan</h1>
+          <p>A beautiful visual story.</p>
+          <div class="cover-hint">Triple tap the heart to change the cover</div>
+        </div>
+      </div>
+    </div>`;
+}
+function createMemoryHTML(file,index){
+  const type=isVideo(file)?"video":"image";
+  const favorite=isFavorite(file.id)?"♥":"♡";
+  const safeId=escapeHTML(file.id);
+  const safeName=escapeHTML(file.name||"Memory");
+  const date=escapeHTML(formatDate(file));
+  const poster=escapeHTML(mediaUrl(file,800));
+
+  const media = type==="image"
+    ? `<div class="media-box">
+         <div class="media-placeholder">Loading memory…</div>
+         <img class="lazy-media" data-src="${escapeHTML(mediaUrl(file,1600))}" data-thumb="${poster}" data-index="${index}" alt="${safeName}" decoding="async">
+       </div>`
+    : `<div class="media-box">
+         <div class="media-placeholder">Video ready to play…</div>
+         <video class="lazy-media" data-src="${escapeHTML(videoUrl(file))}" poster="${poster}" data-index="${index}" controls preload="none" playsinline></video>
+         <div class="video-badge">▶</div>
+       </div>`;
+
+  return `
+    <div class="page memory-page" data-file-index="${index}" data-file-id="${safeId}">
+      <div class="page-content">
+        <div class="memory-wrap">
+          <button class="favorite-btn ${favorite==="♥"?"active":""}" data-favorite="${safeId}" aria-label="Favorite">${favorite}</button>
+          ${media}
+          <div class="caption">${date}</div>
+          <div class="subcaption">${index+1} / ${files.length}</div>
+        </div>
+      </div>
+    </div>`;
+}
+function createBlankHTML(){
+  return `<div class="page"><div class="page-content chapter"><h2>♡</h2><p>A little space between chapters.</p></div></div>`;
+}
+function createBackHTML(){
+  return `<div class="page hardcover back"><div class="page-content chapter"><h2>The End</h2><p>But our story keeps going…</p><div style="font-size:35px;margin-top:18px">♡</div></div></div>`;
+}
+
+/* =========================
+   LAZY MEDIA / MEMORY
+   ========================= */
+function loadMediaElement(el){
+  if(!el || el.dataset.loaded==="1") return;
+  if(el.tagName==="IMG"){
+    el.src=el.dataset.src;
+    el.addEventListener("load",()=>el.previousElementSibling?.remove(),{once:true});
+    el.addEventListener("error",()=>{el.previousElementSibling.textContent="Memory unavailable";},{once:true});
+  }else if(el.tagName==="VIDEO"){
+    el.src=el.dataset.src;
+    el.dataset.loaded="1";
+    el.addEventListener("loadeddata",()=>el.previousElementSibling?.remove(),{once:true});
+    el.addEventListener("error",()=>{el.previousElementSibling.textContent="Video unavailable";},{once:true});
+    return;
+  }
+  el.dataset.loaded="1";
+}
+function unloadFarMedia(){
+  document.querySelectorAll(".lazy-media").forEach(el=>{
+    const page=el.closest(".memory-page");
+    if(!page)return;
+    const idx=Number(page.dataset.fileIndex);
+    if(Math.abs(idx-currentMemoryIndex())>5){
+      if(el.tagName==="IMG"){el.removeAttribute("src");el.dataset.loaded="0"}
+      if(el.tagName==="VIDEO"){el.pause();el.removeAttribute("src");el.load();el.dataset.loaded="0"}
+      const ph=el.previousElementSibling;
+      if(ph && ph.classList.contains("media-placeholder")) ph.textContent=el.tagName==="VIDEO"?"Video ready to play…":"Loading memory…";
+    }
+  });
+}
+function hydrateAroundMemory(memoryIndex){
+  document.querySelectorAll(".lazy-media").forEach(el=>{
+    const page=el.closest(".memory-page");
+    if(!page)return;
+    const idx=Number(page.dataset.fileIndex);
+    if(Math.abs(idx-memoryIndex)<=3) loadMediaElement(el);
+  });
+  setTimeout(unloadFarMedia,800);
+}
+function currentMemoryIndex(){
+  if(!files.length)return 0;
+  const pageEl=document.querySelector(`.page[data-file-index]`);
+  let best=0, min=Infinity;
+  document.querySelectorAll(".memory-page").forEach(p=>{
+    const i=Number(p.dataset.fileIndex);
+    const dist=Math.abs(i-(currentPageIndex-1));
+    if(dist<min){min=dist;best=i}
+  });
+  return Math.max(0,Math.min(files.length-1,best));
+}
+
+/* =========================
+   PAGE FLIP
+   ========================= */
+function initPageFlip(){
+  const book=$("book");
+  let html=createCoverHTML(files[0]);
+  files.forEach((file,i)=>html+=createMemoryHTML(file,i));
+
+  // With a front cover and back cover, add one buffer page only when the total is odd.
+  if(files.length % 2 === 1) html+=createBlankHTML();
+  html+=createBackHTML();
+  book.innerHTML=html;
+
+  pageFlip=new St.PageFlip(book,{
+    width:480,height:650,size:"stretch",minWidth:280,maxWidth:560,minHeight:380,maxHeight:820,
+    maxShadowOpacity:.42,showCover:true,mobileScrollSupport:false,usePortrait:true,flippingTime:850,
+    drawShadow:true,showPageCorners:true,startPage:0
+  });
+  pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
+  pageFlip.on("flip",e=>{
+    currentPageIndex=Number(e.data);
+    updateUI();
+    hydrateAroundMemory(Math.max(0,currentPageIndex-1));
+    if(audioUnlocked){flipSound.currentTime=0;flipSound.play().catch(()=>{})}
+  });
+
+  pageFlip.on("changeState",e=>{
+    if(e.data==="user_fold" || e.data==="flipping") $("book").style.cursor="grabbing";
+    else $("book").style.cursor="";
+  });
+
+  hydrateAroundMemory(0);
+  bindPageEvents();
+}
+function safeFlip(index){
+  if(!pageFlip)return;
+  const max=Math.max(0,document.querySelectorAll("#book .page").length-1);
+  index=Math.max(0,Math.min(max,index));
+  try{pageFlip.flip(index)}catch{try{pageFlip.turnToPage(index)}catch{}}
+}
+function nextPage(){safeFlip(currentPageIndex+1)}
+function prevPage(){safeFlip(currentPageIndex-1)}
+function updateUI(){
+  const total=files.length;
+  const memory=currentPageIndex<=0?0:Math.min(total,currentPageIndex);
+  $("status").textContent=`${total} Memories`;
+  $("pageIndicator").textContent=memory?`Memory ${memory} / ${total}`:`Cover · ${total} memories`;
+  $("progressBar").style.width=`${total?Math.min(100,(memory/total)*100):0}%`;
+}
+function bindPageEvents(){
+  document.querySelectorAll("[data-favorite]").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+      e.stopPropagation();
+      const active=toggleFavorite(btn.dataset.favorite);
+      btn.textContent=active?"♥":"♡";btn.classList.toggle("active",active);
+    });
+  });
+  document.querySelectorAll(".lazy-media[data-index]").forEach(el=>{
+    el.addEventListener("dblclick",e=>{
+      e.stopPropagation();
+      openViewer(Number(el.dataset.index));
+    });
+    if(el.tagName==="IMG") el.addEventListener("click",e=>{
+      e.stopPropagation();openViewer(Number(el.dataset.index));
+    });
+  });
+  document.querySelectorAll(".cover-img").forEach(img=>{
+    img.addEventListener("click",handleCoverTap);
+  });
+}
+
+/* =========================
+   COVER CUSTOMIZATION
+   ========================= */
+let tapCount=0,tapTimer=null;
+function handleCoverTap(e){
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer=setTimeout(()=>tapCount=0,850);
+  if(tapCount===3){
+    tapCount=0;
+    $("coverPicker").click();
+  }
+}
+function openCoverDB(){
+  return new Promise((resolve,reject)=>{
+    if(!("indexedDB" in window)){resolve(null);return}
+    const req=indexedDB.open("kasim_suzan_album",1);
+    req.onupgradeneeded=()=>req.result.createObjectStore("album");
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>resolve(null);
+  });
+}
+async function saveCoverBlob(blob){
+  const db=await openCoverDB(); if(!db)return;
+  await new Promise(resolve=>{
+    const tx=db.transaction("album","readwrite");
+    tx.objectStore("album").put(blob,"cover");
+    tx.oncomplete=resolve;tx.onerror=resolve;
+  });
+}
+async function loadSavedCover(){
+  const db=await openCoverDB(); if(!db)return;
+  const blob=await new Promise(resolve=>{
+    const tx=db.transaction("album","readonly");
+    const req=tx.objectStore("album").get("cover");
+    req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>resolve(null);
+  });
+  if(blob){
+    if(coverObjectUrl)URL.revokeObjectURL(coverObjectUrl);
+    coverObjectUrl=URL.createObjectURL(blob);
+    document.querySelectorAll(".cover-img").forEach(img=>img.src=coverObjectUrl);
+  }
+}
+$("coverPicker").addEventListener("change",async e=>{
+  const file=e.target.files?.[0]; if(!file)return;
+  if(coverObjectUrl)URL.revokeObjectURL(coverObjectUrl);
+  coverObjectUrl=URL.createObjectURL(file);
+  document.querySelectorAll(".cover-img").forEach(img=>img.src=coverObjectUrl);
+  await saveCoverBlob(file);
+  toast("Cover changed and saved on this device.");
+});
+window.addEventListener("beforeunload",()=>{
+  if(coverObjectUrl)URL.revokeObjectURL(coverObjectUrl);
+  if(musicObjectUrl)URL.revokeObjectURL(musicObjectUrl);
+});
+
+/* =========================
+   BROWSER / SEARCH
+   ========================= */
+function openOverlay(id){$(id).classList.add("open");document.body.classList.add("modal-open")}
+function closeOverlay(id){$(id).classList.remove("open");if(!document.querySelector(".overlay.open"))document.body.classList.remove("modal-open")}
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeOverlay(b.dataset.close)));
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)closeOverlay(o.id)}));
+function thumbHTML(file,index){
+  const fav=isFavorite(file.id);
+  return `<button class="thumb" data-thumb-index="${index}" title="${escapeHTML(file.name||"Memory")}">
+    <img loading="lazy" src="${escapeHTML(mediaUrl(file,300))}" alt="">
+    <span>${index+1}</span>${fav?'<b class="fav">♥</b>':""}
+  </button>`;
+}
+function renderBrowser(query=""){
+  const q=query.trim().toLowerCase();
+  const list=files.map((f,i)=>({f,i})).filter(({f})=>{
+    if(!q)return true;
+    const d=formatDate(f).toLowerCase();
+    return `${f.name||""} ${d}`.toLowerCase().includes(q);
+  });
+  $("browserGrid").innerHTML=list.length?list.map(x=>thumbHTML(x.f,x.i)).join(""):`<div class="no-results">No memories found.</div>`;
+  document.querySelectorAll("[data-thumb-index]").forEach(b=>b.addEventListener("click",()=>{
+    const idx=Number(b.dataset.thumbIndex);closeOverlay("browserOverlay");safeFlip(idx+1);
+  }));
+}
+$("browserSearch").addEventListener("input",e=>renderBrowser(e.target.value));
+$("browseBtn").addEventListener("click",()=>{ $("browserTitle").textContent=`All Memories · ${files.length}`; $("browserSearch").value="";renderBrowser();openOverlay("browserOverlay")});
+$("searchBtn").addEventListener("click",()=>{ $("browserTitle").textContent="Search Memories";$("browserSearch").value="";renderBrowser();openOverlay("browserOverlay");setTimeout(()=>$("browserSearch").focus(),100)});
+$("favBtn").addEventListener("click",()=>{
+  const favs=getFavorites();const list=files.map((f,i)=>({f,i})).filter(x=>favs.has(x.f.id));
+  $("browserTitle").textContent=`Favorites · ${list.length}`;
+  $("browserSearch").value="";
+  $("browserGrid").innerHTML=list.length?list.map(x=>thumbHTML(x.f,x.i)).join(""):`<div class="no-results">No favorite memories yet. Tap ♡ on a memory to save it.</div>`;
+  document.querySelectorAll("[data-thumb-index]").forEach(b=>b.addEventListener("click",()=>{const idx=Number(b.dataset.thumbIndex);closeOverlay("browserOverlay");safeFlip(idx+1)}));
+  openOverlay("browserOverlay");
+});
+
+/* =========================
+   TIMELINE / STATS
+   ========================= */
+function renderTimeline(){
+  const years={};
+  files.forEach((f,i)=>{
+    const d=dateObject(f),y=d.getFullYear(),m=d.toLocaleString("en-US",{month:"long"});
+    years[y]??={}; years[y][m]??=[]; years[y][m].push(i);
+  });
+  const ys=Object.keys(years).sort((a,b)=>Number(a)-Number(b));
+  $("timeline").innerHTML=ys.length?ys.map(y=>`
+    <div class="year-block"><div class="year-title">${y}</div>
+    ${Object.entries(years[y]).map(([m,arr])=>`<div class="month-row"><span>${m}</span><button class="ctrl timeline-jump" data-index="${arr[0]}">${arr.length} memories →</button></div>`).join("")}
+    </div>`).join(""):`<div class="no-results">No dated memories found.</div>`;
+  document.querySelectorAll(".timeline-jump").forEach(b=>b.addEventListener("click",()=>{closeOverlay("timelineOverlay");safeFlip(Number(b.dataset.index)+1)}));
+}
+$("timelineBtn").addEventListener("click",()=>{renderTimeline();openOverlay("timelineOverlay")});
+
+function renderStats(){
+  const fav=getFavorites().size;
+  const videos=files.filter(isVideo).length;
+  const images=files.length-videos;
+  const years=new Set(files.map(f=>dateObject(f).getFullYear()).filter(y=>y>1970)).size;
+  const days=new Set(files.map(f=>{const d=dateObject(f);return d.toISOString().slice(0,10)})).size;
+  $("stats").innerHTML=`
+    <div class="stat"><strong>${files.length}</strong><span>Total memories</span></div>
+    <div class="stat"><strong>${images}</strong><span>Photos</span></div>
+    <div class="stat"><strong>${videos}</strong><span>Videos</span></div>
+    <div class="stat"><strong>${years}</strong><span>Years</span></div>
+    <div class="stat"><strong>${days}</strong><span>Memory days</span></div>
+    <div class="stat"><strong>${fav}</strong><span>Favorites</span></div>`;
+}
+$("statsBtn").addEventListener("click",()=>{renderStats();openOverlay("statsOverlay")});
+function updateFavoriteButtons(){
+  const s=getFavorites();
+  document.querySelectorAll("[data-favorite]").forEach(b=>{
+    const on=s.has(b.dataset.favorite);b.textContent=on?"♥":"♡";b.classList.toggle("active",on)
+  });
+}
+
+/* =========================
+   RANDOM MEMORY
+   ========================= */
+$("randomBtn").addEventListener("click",()=>{
+  if(!files.length)return;
+  const i=Math.floor(Math.random()*files.length);
+  safeFlip(i+1);
+  toast(`Surprise memory · ${i+1} / ${files.length}`);
+});
+
+/* =========================
+   FULLSCREEN VIEWER
+   ========================= */
+function openViewer(index){
+  if(index<0||index>=files.length)return;
+  viewerFileIndex=index;viewerScale=1;
+  renderViewer();
+  openOverlay("viewerOverlay");
+}
+function renderViewer(){
+  const f=files[viewerFileIndex];
+  $("viewerMedia").innerHTML=isVideo(f)
+    ? `<video class="viewer-media" src="${escapeHTML(videoUrl(f))}" poster="${escapeHTML(mediaUrl(f,1600))}" controls autoplay playsinline></video>`
+    : `<img class="viewer-media" src="${escapeHTML(mediaUrl(f,2000))}" alt="${escapeHTML(f.name||"Memory")}">`;
+  $("viewerCaption").textContent=`${formatDate(f)} · ${viewerFileIndex+1} / ${files.length}`;
+}
+function viewerMove(dir){
+  if(!files.length)return;
+  viewerFileIndex=(viewerFileIndex+dir+files.length)%files.length;renderViewer();
+}
+$("viewerClose").addEventListener("click",()=>closeOverlay("viewerOverlay"));
+$("viewerPrev").addEventListener("click",()=>viewerMove(-1));
+$("viewerNext").addEventListener("click",()=>viewerMove(1));
+$("viewerOverlay").addEventListener("wheel",e=>{
+  if(e.ctrlKey)e.preventDefault();
+},{passive:false});
+$("viewerOverlay").addEventListener("touchstart",e=>{touchStartX=e.changedTouches[0].clientX},{passive:true});
+$("viewerOverlay").addEventListener("touchend",e=>{
+  if(touchStartX===null)return;
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  if(Math.abs(dx)>55)viewerMove(dx<0?1:-1);
+  touchStartX=null;
+});
+
+/* =========================
+   MUSIC
+   ========================= */
+$("musicBtn").addEventListener("click",()=>openOverlay("musicOverlay"));
+$("chooseMusic").addEventListener("click",()=>$("musicPicker").click());
+$("musicPicker").addEventListener("change",e=>{
+  const f=e.target.files?.[0];if(!f)return;
+  if(musicObjectUrl)URL.revokeObjectURL(musicObjectUrl);
+  musicObjectUrl=URL.createObjectURL(f);bgMusic.src=musicObjectUrl;
+  $("musicName").textContent=f.name;
+  toast("Music selected.");
+});
+$("playMusic").addEventListener("click",()=>bgMusic.play().catch(()=>toast("Tap Play again to allow music.")));
+$("pauseMusic").addEventListener("click",()=>bgMusic.pause());
+$("shuffleMusic").addEventListener("click",()=>{bgMusic.currentTime=0;bgMusic.play().catch(()=>{})});
+
+/* =========================
+   KEYBOARD / BUTTONS
+   ========================= */
+$("nextBtn").addEventListener("click",nextPage);
+$("prevBtn").addEventListener("click",prevPage);
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){document.querySelectorAll(".overlay.open").forEach(o=>closeOverlay(o.id));return}
+  if(document.querySelector(".overlay.open"))return;
+  if(e.key==="ArrowRight"||e.key==="ArrowDown")nextPage();
+  if(e.key==="ArrowLeft"||e.key==="ArrowUp")prevPage();
+});
+window.addEventListener("resize",()=>{if(pageFlip)pageFlip.updateFromImages?.()});
+
+/* =========================
+   INIT
+   ========================= */
+async function init(){
+  try{
+    await loadAlbum();
+    if(!files.length)throw new Error("No images or videos were found in the Drive folder.");
+
+    $("loadText").textContent="Building your album…";
+    $("loadMeta").textContent=`${files.length} memories · preparing the book`;
+    initPageFlip();
+    await loadSavedCover();
+    updateUI();
+    renderStats();
+
+    // Restore a locally selected cover if one was saved as a data URL in future builds.
+    $("loader").style.opacity="0";$("loader").style.visibility="hidden";
+    setTimeout(()=>$("loader")?.remove(),650);
+  }catch(err){
+    console.error(err);
+    $("loadText").textContent="Could not open the album";
+    $("loadMeta").textContent=err.message||"Unknown error";
+    document.querySelector("#loader .bar").style.display="none";
+  }
+}
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+init();
+</script>
+</body>
+</html>
