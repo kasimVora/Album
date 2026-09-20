@@ -1,9 +1,0 @@
-{
-  "name": "Kasim & Suzan — Memory Album",
-  "short_name": "Kasim & Suzan",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f4efeb",
-  "theme_color": "#69434b",
-  "description": "A private digital memory album."
-}
